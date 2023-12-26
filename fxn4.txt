@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION booking(checki date, checko date, hotel VARCHAR(200)) RETURNS BOOLEAN AS $$ DECLARE hotelno int;
+BEGIN SELECT hotelid INTO hotelno FROM hotel WHERE hotelName = booking.hotel; IF EXISTS (SELECT roomNumber FROM roomsAvailable WHERE hotelid = hotelno) THEN RETURN true; ELSE IF EXISTS (SELECT * FROM hotelBookingDetails, bookhotel WHERE hotelBookingDetails.bookingNumber = bookhotel.bookingNumber AND bookhotel.hotelid = hotelno AND  ((bookhotel.checkIn <=checko and bookhotel.checkout>=checko) OR (bookhotel.checkIn <=checki and bookhotel.checkout>=checki)OR (bookhotel.checkin>=checki and bookhotel.checkout<=checko))) THEN RETURN false; ELSE RETURN true; END IF; END IF;
+END; $$ LANGUAGE plpgsql;

@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION getflights(input_param int) RETURNS TABLE (seatsLeft INT, flightNumber VARCHAR(10),planeID INT,companyID INT,sources CHAR(10),destination CHAR(10),travelDate DATE,ticketCost INT ) AS $$ 
+DECLARE BEGIN RETURN QUERY SELECT flight.seatsLeft,flight.flightNumber,flight.planeID,flight.companyID,flight.source ,flight.destination ,flight.travelDate,flight.ticketCost FROM flight WHERE flight.companyID = input_param ORDER BY flight.ticketcost ASC;
+END; $$ LANGUAGE plpgsql;

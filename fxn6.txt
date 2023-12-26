@@ -1,0 +1,47 @@
+CREATE OR REPLACE PROCEDURE createbooking(checki date, checko date, hotel VARCHAR(200), person int)
+AS $$
+DECLARE
+    hotelno int;
+    room int;
+    new_bookid int;
+    bookdate date;
+    transcid int;
+BEGIN
+    SELECT current_date INTO bookdate;    
+    SELECT hotelid INTO hotelno 
+    FROM hotel 
+    WHERE hotelName = createbooking.hotel; -- Corrected reference to the parameter
+    
+    -- Check if a room is available within the specified date range
+    SELECT roomNumber INTO room 
+    FROM roomsAvailable 
+    WHERE hotelID = hotelno 
+    LIMIT 1;
+    
+--     IF room IS NULL THEN
+--         RAISE EXCEPTION 'No available rooms for the specified date range';
+--     END IF;
+
+    -- Check if the room is available for the given date range
+    SELECT roomNumber INTO room 
+    FROM hotelBookingDetails, bookhotel 
+    WHERE hotelBookingDetails.bookingNumber = bookhotel.bookingNumber 
+    AND bookhotel.hotelid = hotelno 
+    AND (bookhotel.checkIn > checko OR bookhotel.checkOut < checki)  
+    LIMIT 1;
+    
+--     IF room IS NOT NULL THEN
+--         RAISE EXCEPTION 'Room is already booked for the specified date range';
+--     END IF;
+
+    -- Generate new_bookid and transcid
+    SELECT cast(random() * 100 as int) INTO new_bookid;
+    SELECT cast(random() * 10000 as int) INTO transcid;
+    
+    -- Insert booking details into bookhotel table
+    INSERT INTO bookhotel VALUES (bookdate, new_bookid, checki, checko, hotelno, person, transcid);
+    
+    -- Insert booking details into hotelbookingdetails table
+    INSERT INTO hotelbookingdetails VALUES (new_bookid, room);
+END;
+$$ LANGUAGE plpgsql;

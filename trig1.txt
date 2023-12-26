@@ -1,0 +1,1 @@
+CREATE OR REPLACE PROCEDURE triggercheckout() AS $$ DECLARE newdate date; BEGIN select present into newdate from presentdate; delete from hotelbookingdetails where hotelbookingdetails.bookingnumber in (select bookingnumber from hotelbookingdetails natural join bookhotel where checkout <= newdate); END; $$ LANGUAGE plpgsql;

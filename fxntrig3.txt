@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION trigger_function() RETURNS TRIGGER AS $$
+BEGIN IF TG_OP = 'UPDATE' THEN call triggercheckout(); END IF; RETURN NEW;
+END; $$ LANGUAGE plpgsql;

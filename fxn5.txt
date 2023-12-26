@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION get_plane_values(perid int,hotid int) RETURNS TABLE (value1 varchar, value2 VARCHAR) AS $$
+BEGIN select person.name into value1 from person where personid=perid; select companyName into  value2 from planeCompany where companyID=hotid; RETURN NEXT;
+END; $$ LANGUAGE plpgsql;

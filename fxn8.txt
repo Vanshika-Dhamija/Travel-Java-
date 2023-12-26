@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION getentries(input_param int) RETURNS TABLE (personid int, checkin date, checkout date) AS $$
+BEGIN return query SELECT bookhotel.personid, bookhotel.checkin,bookhotel.checkout from bookhotel natural join hotelbookingdetails WHERE bookhotel.hotelid = input_param order by bookhotel.checkin asc;
+END; $$ LANGUAGE plpgsql;

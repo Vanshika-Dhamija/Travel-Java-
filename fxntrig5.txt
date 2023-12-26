@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION update_flightsleft_on_cancel() RETURNS TRIGGER AS $$
+BEGIN UPDATE flight SET seatsleft = seatsleft + 1 WHERE flightnumber = OLD.flightnumber; RETURN OLD;
+END; $$ LANGUAGE plpgsql;

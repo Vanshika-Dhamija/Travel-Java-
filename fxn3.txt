@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION gethotels(input_param VARCHAR(100)) RETURNS TABLE (hotelName VARCHAR, rating int, roomcost INT) AS $$ DECLARE cty int;
+BEGIN SELECT cityid INTO cty FROM cities WHERE cityName = input_param; RETURN QUERY SELECT hotel.hotelName, hotel.rating, hotel.roomcost FROM hotel WHERE hotel.cityid = cty ORDER BY hotel.rating DESC;
+END; $$ LANGUAGE plpgsql;

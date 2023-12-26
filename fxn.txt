@@ -1,0 +1,15 @@
+CREATE OR REPLACE FUNCTION authenticate(x varchar(20), y varchar(20)) 
+RETURNS INT AS $$
+DECLARE person_exists BOOLEAN; hoteladminexist BOOLEAN; superadminexist BOOLEAN; planeadminexist BOOLEAN;
+BEGIN SELECT EXISTS (SELECT 1 FROM customer WHERE username = x AND passkey = y) INTO person_exists;
+    SELECT EXISTS (SELECT 1 FROM hoteladmin WHERE username = x AND passkey = y) INTO hoteladminexist;
+	SELECT EXISTS (SELECT 1 FROM superadmin WHERE username = x AND passkey = y) INTO superadminexist;
+	SELECT EXISTS (SELECT 1 FROM planecompanyadmin WHERE username = x AND passkey = y) INTO planeadminexist;
+    IF person_exists THEN RETURN 1;
+    ELSIF hoteladminexist THEN RETURN 2; 
+    ELSIF superadminexist THEN RETURN 3;
+	ELSIF planeadminexist THEN RETURN 4;
+	ELSE RETURN -1;
+	END IF;
+END;
+$$ LANGUAGE plpgsql;

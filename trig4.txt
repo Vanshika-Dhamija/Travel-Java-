@@ -1,0 +1,1 @@
+CREATE TRIGGER execute_procedure_trigger AFTER UPDATE ON presentdate FOR EACH ROW EXECUTE FUNCTION trigger_function();
